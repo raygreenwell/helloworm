@@ -380,7 +380,7 @@ AimConstraint:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 534669902}
-  m_Enabled: 0
+  m_Enabled: 1
   m_Weight: 1
   m_RotationAtRest: {x: 45.000015, y: -0, z: -0}
   m_RotationOffset: {x: 1.4688069, y: 0, z: 0}
