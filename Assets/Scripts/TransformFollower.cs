@@ -2,11 +2,9 @@ using UnityEngine;
 using System.Collections;
 
 public class TransformFollower : MonoBehaviour {
-  [SerializeField]
-  private Transform target;
+  public Transform target;
 
-  [SerializeField]
-  private Vector3 offsetPosition;
+  public Vector3 offsetPosition;
 
   private void Update () {
     Refresh();
