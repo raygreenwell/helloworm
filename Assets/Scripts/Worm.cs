@@ -61,6 +61,14 @@ public class Worm : MonoBehaviour
         }
       } while (segMove > 0);
     }
+
+    // let's prune things sometimes
+    var toPrune = _segments[_segments.Count - 1].targetIndex;
+    if (toPrune > 0) {
+      Debug.Log("Pruning! " + toPrune);
+      foreach (var segment in _segments) segment.targetIndex -= toPrune;
+      for (; toPrune > 0; --toPrune) _targets.RemoveAt(0);
+    }
   }
 
   /** Make a target with the head's current position and rotation. */
