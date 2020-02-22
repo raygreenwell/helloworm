@@ -8,12 +8,6 @@ public class TransformFollower : MonoBehaviour {
   [SerializeField]
   private Vector3 offsetPosition;
 
-  [SerializeField]
-  private Space offsetPositionSpace = Space.Self;
-
-  [SerializeField]
-  private bool lookAt = true;
-
   private void Update() {
     Refresh();
   }
@@ -25,17 +19,8 @@ public class TransformFollower : MonoBehaviour {
     }
 
     // compute position
-    if (offsetPositionSpace == Space.Self) {
-      transform.position = target.TransformPoint(offsetPosition);
-    } else {
-      transform.position = target.position + offsetPosition;
-    }
-
+    transform.position = target.TransformPoint(offsetPosition);
     // compute rotation
-    if (lookAt) {
-      transform.LookAt(target);
-    } else {
-      transform.rotation = target.rotation;
-    }
+    transform.LookAt(target);
   }
 }
