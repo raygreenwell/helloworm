@@ -8,11 +8,11 @@ public class TransformFollower : MonoBehaviour {
   [SerializeField]
   private Vector3 offsetPosition;
 
-  private void Update() {
+  private void Update () {
     Refresh();
   }
 
-  public void Refresh() {
+  public void Refresh () {
     if (target == null) {
       Debug.LogWarning("Missing target ref !", this);
       return;
