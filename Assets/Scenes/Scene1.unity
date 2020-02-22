@@ -145,7 +145,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   segment: {fileID: 9015287136751095267, guid: 0b9d1cc22fa4b4d748a389dfda3d743f, type: 3}
-  length: 10
+  length: 100
   speed: 10
   angularSpeed: 60
 --- !u!135 &163965257
