@@ -51,17 +51,19 @@ public class Worm : MonoBehaviour
       var pos = segment.segment.transform.localPosition;
       do {
         var distance = Vector3.Distance(target.position, pos);
-        segment.segment.transform.localPosition =
-            Vector3.MoveTowards(pos, target.position, segMove);
+        var perc = segMove / distance;
         segMove -= distance;
-        if (segMove > 0) {
+        if (perc < 1) {
+          segment.segment.transform.localPosition = Vector3.Lerp(pos, target.position, perc);
+
+        } else {
           segment.targetIndex += 1;
           // snapshot a new target if we haven't turned in a while...
           if (segment.targetIndex == _targets.Count) snapshotTarget();
           target = _targets[segment.targetIndex];
           segment.segment.transform.rotation = Quaternion.Euler(0, target.rotation, 0);
         }
-      } while (segMove > 0);
+      } while (segMove >= 0);
       lowestTarget = Math.Min(lowestTarget, segment.targetIndex);
     }
 
