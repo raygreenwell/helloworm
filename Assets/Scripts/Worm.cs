@@ -47,13 +47,14 @@ public class Worm : MonoBehaviour
     foreach (var segment in _segments) {
       var segMove = moveDistance;
       var target = _targets[segment.targetIndex];
+      var pos = segment.segment.transform.localPosition;
       do {
-        var pos = segment.segment.transform.localPosition;
         var distance = Vector3.Distance(target.position, pos);
         segment.segment.transform.localPosition =
             Vector3.MoveTowards(pos, target.position, segMove);
         segMove -= distance;
         if (segMove > 0) {
+          pos = target.position;
           segment.targetIndex += 1;
           // snapshot a new target if we haven't turned in a while...
           if (segment.targetIndex == _targets.Count) snapshotTarget();
