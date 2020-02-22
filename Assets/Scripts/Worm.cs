@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -43,6 +44,7 @@ public class Worm : MonoBehaviour
     if (turn != 0) snapshotTarget();
 
     // now visit each segment and interpolate it towards its next target
+    var lowestTarget = _targets.Count;
     foreach (var segment in _segments) {
       var segMove = moveDistance;
       var target = _targets[segment.targetIndex];
@@ -60,12 +62,12 @@ public class Worm : MonoBehaviour
           segment.segment.transform.rotation = Quaternion.Euler(0, target.rotation, 0);
         }
       } while (segMove > 0);
+      lowestTarget = Math.Min(lowestTarget, segment.targetIndex);
     }
 
     // let's prune things sometimes
-    var toPrune = _segments[_segments.Count - 1].targetIndex;
+    var toPrune = lowestTarget; //_segments[_segments.Count - 1].targetIndex;
     if (toPrune > 0) {
-      Debug.Log("Pruning! " + toPrune);
       foreach (var segment in _segments) segment.targetIndex -= toPrune;
       for (; toPrune > 0; --toPrune) _targets.RemoveAt(0);
     }
