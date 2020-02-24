@@ -37,8 +37,7 @@ public class Worm : MonoBehaviour
     var moveDistance = Time.deltaTime * speed;
 
     // now, move the head forward
-    var tx = Vector3.forward * moveDistance;
-    transform.Translate(tx);
+    transform.Translate(Vector3.forward * moveDistance);
 
     // if rotation changed, make a new Target.
     if (turn != 0) snapshotTarget();
@@ -79,13 +78,13 @@ public class Worm : MonoBehaviour
 
   protected float _rotation = 0;
 
-  private IList<SegmentRecord> _segments = new List<SegmentRecord>();
-  private IList<Target> _targets = new List<Target>();
+  private readonly IList<SegmentRecord> _segments = new List<SegmentRecord>();
+  private readonly IList<Target> _targets = new List<Target>();
 }
 
 class Target {
-  public Vector3 position;
-  public float rotation;
+  public readonly Vector3 position;
+  public readonly float rotation;
 
   public Target (Vector3 pos, float rot) {
     this.position = pos;
@@ -94,7 +93,7 @@ class Target {
 }
 
 class SegmentRecord {
-  public GameObject segment;
+  public readonly GameObject segment;
   public int targetIndex;
 
   public SegmentRecord (GameObject segment) {
