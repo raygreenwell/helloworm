@@ -9,8 +9,8 @@ public class Worm : MonoBehaviour
 
   public GameObject segment;
   public int length = 10;
-  public float speed = 2.5f;
-  public float angularSpeed = 5f;
+  public float speed = 10f;
+  public float turnSpeed = 60f;
 
   void Start () {
     // Skip index 0 because we are inside the "head", just set up the body segments
@@ -26,20 +26,23 @@ public class Worm : MonoBehaviour
   void Update () {
     var turn = Input.GetAxis("Horizontal");
     if (turn != 0) {
+      #pragma warning disable CS0162 // unreachable code
       if (false) {
         // I don't know why this one sucks
-        transform.RotateAround(Vector3.zero, Vector3.up, turn * angularSpeed * Time.deltaTime);
+        transform.RotateAround(Vector3.zero, Vector3.up, turn * turnSpeed * Time.deltaTime);
       } else {
         // This one's better but why?
-        _rotation += (turn * Time.deltaTime * angularSpeed);
+        _rotation += (turn * Time.deltaTime * turnSpeed);
         transform.rotation = Quaternion.Euler(0, _rotation, 0);
       }
+      #pragma warning restore CS0162 // unreachable code
     }
 
     var moveDistance = Time.deltaTime * speed;
 
     // now, move the head forward
     transform.Translate(Vector3.forward * moveDistance);
+    #pragma warning disable CS0162 // unreachable code
     if (BOUNCE_OFF_PLANE) {
       var wloc = transform.position;
       if (wloc.y < .5) {
@@ -54,6 +57,7 @@ public class Worm : MonoBehaviour
         }
       }
     }
+    #pragma warning restore CS0162 // unreachable code
 
     // if rotation changed, make a new Target.
     if (turn != 0) snapshotTarget();
