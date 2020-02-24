@@ -13,7 +13,7 @@ public class Worm : MonoBehaviour
   void Start () {
     // Skip index 0 because we are inside the "head", just set up the body segments
     for (int ii = 1; ii < length; ii++) {
-      Vector3 offset = new Vector3(0, 0, -ii);
+      var offset = new Vector3(0, 0, -ii);
       var seggy = Instantiate(segment, transform.position + offset, Quaternion.identity);
       _segments.Add(new SegmentRecord(seggy));
     }
