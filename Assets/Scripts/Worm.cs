@@ -42,9 +42,7 @@ public class Worm : MonoBehaviour
     _segments.Add(newSeg);
 
     // hide the object and collider
-    newGameObject.GetComponent<MeshRenderer>().enabled = false;
-    newGameObject.GetComponent<Collider>().enabled = false;
-    StartCoroutine(waitToShow(newGameObject));
+    StartCoroutine(waitToAdd(newSeg));
   }
 
   public void Start () {
@@ -53,7 +51,9 @@ public class Worm : MonoBehaviour
     for (int ii = 0; ii < segments; ii++) {
       var offset = new Vector3(0, 0, -(ii + 1));
       var newGameObject = Instantiate(segment, transform.position + offset, Quaternion.identity);
-      _segments.Add(new SegmentRecord(newGameObject));
+      var newSeg = new SegmentRecord(newGameObject);
+      newSeg.move = true;
+      _segments.Add(newSeg);
     }
 
     snapshotTarget();
@@ -91,6 +91,7 @@ public class Worm : MonoBehaviour
 
     // now visit each segment and interpolate it towards its next target
     foreach (var segment in _segments) {
+      if (!segment.move) continue;
       var segMove = moveDistance;
       var target = _targets[segment.targetIndex];
       var pos = segment.gameObject.transform.localPosition;
@@ -125,10 +126,9 @@ public class Worm : MonoBehaviour
     _targets.Add(new Target(this.transform.localPosition, this.transform.eulerAngles.y));
   }
 
-  protected IEnumerator<object> waitToShow (GameObject gobj) {
+  private IEnumerator<object> waitToAdd (SegmentRecord newSeg) {
     yield return _showDelay;
-    gobj.GetComponent<Collider>().enabled = true;
-    gobj.GetComponent<MeshRenderer>().enabled = true;
+    newSeg.move = true;
     yield return null;
   }
 
@@ -151,6 +151,7 @@ class Target {
 class SegmentRecord {
   public readonly GameObject gameObject;
   public int targetIndex;
+  public bool move = false;
 
   public SegmentRecord (GameObject gameObject) {
     this.gameObject = gameObject;
