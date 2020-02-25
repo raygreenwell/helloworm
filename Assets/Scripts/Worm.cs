@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -34,25 +35,19 @@ public class Worm : MonoBehaviour
       lastSegment = seggy.gameObject;
       index = seggy.targetIndex;
     }
-    var offset = lastSegment.transform.forward * -1;
-    var newGameObject = Instantiate(segment, lastSegment.transform.position + offset,
+    var newGameObject = Instantiate(segment, lastSegment.transform.position,
         lastSegment.transform.rotation);
     var newSeg = new SegmentRecord(newGameObject);
     newSeg.targetIndex = index;
     _segments.Add(newSeg);
-
-    // hide the object and collider
-    StartCoroutine(waitToAdd(newSeg));
   }
 
   public void Start () {
-    _showDelay = new WaitForSeconds(1 / speed);
-
     for (int ii = 0; ii < segments; ii++) {
       var offset = new Vector3(0, 0, -(ii + 1));
       var newGameObject = Instantiate(segment, transform.position + offset, Quaternion.identity);
       var newSeg = new SegmentRecord(newGameObject);
-      newSeg.move = true;
+      newSeg.distance = 0;
       _segments.Add(newSeg);
     }
 
@@ -91,8 +86,13 @@ public class Worm : MonoBehaviour
 
     // now visit each segment and interpolate it towards its next target
     foreach (var segment in _segments) {
-      if (!segment.move) continue;
       var segMove = moveDistance;
+      if (segment.distance > 0) {
+        var didMove = Math.Min(segment.distance, segMove);
+        segment.distance -= didMove;
+        if (segment.distance > 0) continue;
+        segMove -= didMove;
+      }
       var target = _targets[segment.targetIndex];
       var pos = segment.gameObject.transform.localPosition;
       do {
@@ -126,16 +126,8 @@ public class Worm : MonoBehaviour
     _targets.Add(new Target(this.transform.localPosition, this.transform.eulerAngles.y));
   }
 
-  private IEnumerator<object> waitToAdd (SegmentRecord newSeg) {
-    yield return _showDelay;
-    newSeg.move = true;
-    yield return null;
-  }
-
   private readonly IList<SegmentRecord> _segments = new List<SegmentRecord>();
   private readonly IList<Target> _targets = new List<Target>();
-
-  private WaitForSeconds _showDelay;
 }
 
 class Target {
@@ -150,11 +142,10 @@ class Target {
 
 class SegmentRecord {
   public readonly GameObject gameObject;
-  public int targetIndex;
-  public bool move = false;
+  public int targetIndex = 0;
+  public float distance = 1f;
 
   public SegmentRecord (GameObject gameObject) {
     this.gameObject = gameObject;
-    this.targetIndex = 0;
   }
 }
