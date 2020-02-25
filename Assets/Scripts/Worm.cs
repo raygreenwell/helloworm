@@ -29,16 +29,24 @@ public class Worm : MonoBehaviour
     case "Pellet":
       pelletWasEaten();
       Destroy(collider.gameObject);
-      Debug.Log("pellet!");
       break;
 
     case "Body":
-      if (_segments.Count > 0 && collider.gameObject == _segments[0].gameObject) {
+      if (_segments.Count > 0) {
         // Do not collide with our own first segment.
         // TODO: maybe there's a better way to filter this out while still having the first segment
         // collide with *other* worms.
-        return;
+        if (collider.gameObject == _segments[0].gameObject) return;
+
+        // if the segment we've collided with is currently ticking down "distance" then that
+        // means it was just added and it's close to the head and we should definitely ignore it.
+        for (var ii = _segments.Count - 1; ii >= 0; ii--) {
+          var seg = _segments[ii];
+          if (seg.distance == 0) break;
+          if (seg.gameObject == collider.gameObject) return;
+        }
       }
+      //Debug.Log("Got smacked by obj at " + collider.gameObject.transform.position);
       die();
       break;
     }
@@ -155,12 +163,6 @@ public class Worm : MonoBehaviour
   }
 
   protected void die () {
-    if (_didDie) {
-      Debug.Log("Re-die?");
-      return;
-    }
-    _didDie = true;
-    Debug.Log("die");
     // drop a "glow" near each body segment
     foreach (var seg in _segments) {
       spawnGlowNear(seg.gameObject);
@@ -185,8 +187,6 @@ public class Worm : MonoBehaviour
 
   private readonly IList<SegmentRecord> _segments = new List<SegmentRecord>();
   private readonly IList<Target> _targets = new List<Target>();
-
-  protected bool _didDie;
 }
 
 class Target {
