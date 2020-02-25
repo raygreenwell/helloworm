@@ -55,16 +55,7 @@ public class Worm : MonoBehaviour
   public void Update () {
     var turn = Input.GetAxis("Horizontal");
     if (turn != 0) {
-      #pragma warning disable CS0162 // unreachable code
-      if (false) {
-        // I don't know why this one sucks
-        transform.RotateAround(Vector3.zero, Vector3.up, turn * turnSpeed * Time.deltaTime);
-      } else {
-        // This one's better but why?
-        _rotation += (turn * Time.deltaTime * turnSpeed);
-        transform.rotation = Quaternion.Euler(0, _rotation, 0);
-      }
-      #pragma warning restore CS0162 // unreachable code
+      transform.Rotate(new Vector3(0, turn * turnSpeed * Time.deltaTime));
     }
 
     var moveDistance = Time.deltaTime * speed;
@@ -124,10 +115,8 @@ public class Worm : MonoBehaviour
 
   /** Make a target with the head's current position and rotation. */
   protected void snapshotTarget () {
-    _targets.Add(new Target(this.transform.localPosition, this._rotation));
+    _targets.Add(new Target(this.transform.localPosition, this.transform.eulerAngles.y));
   }
-
-  protected float _rotation = 0;
 
   private readonly IList<SegmentRecord> _segments = new List<SegmentRecord>();
   private readonly IList<Target> _targets = new List<Target>();
