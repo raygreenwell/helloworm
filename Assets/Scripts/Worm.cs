@@ -36,7 +36,7 @@ public class Worm : MonoBehaviour
     }
     var offset = lastSegment.transform.forward * -1;
     var newGameObject = Instantiate(segment, lastSegment.transform.position + offset,
-        Quaternion.identity);
+        lastSegment.transform.rotation);
     var newSeg = new SegmentRecord(newGameObject);
     newSeg.targetIndex = index;
     _segments.Add(newSeg);
