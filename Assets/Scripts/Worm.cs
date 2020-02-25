@@ -19,27 +19,26 @@ public class Worm : MonoBehaviour
   /** Turn speed. */
   public float turnSpeed = 60f;
 
-  /**
-   * Called from a pellet when we've eaten it.
-   */
-  public void PelletWasEaten () {
-    // duplicate the last segment but 1 unit behind it
-    GameObject lastSegment;
-    int index;
-    if (_segments.Count == 0) {
-      snapshotTarget();
-      lastSegment = gameObject;
-      index = _targets.Count - 1;
-    } else {
-      var seggy = _segments[_segments.Count - 1];
-      lastSegment = seggy.gameObject;
-      index = seggy.targetIndex;
+  public void OnTriggerEnter (Collider collider) {
+    if (collider.tag == null) return;
+
+    switch (collider.tag) {
+    case "Pellet":
+      pelletWasEaten();
+      Destroy(collider.gameObject);
+      Debug.Log("pellet!");
+      break;
+
+    case "Body":
+      if (_segments.Count > 0 && collider.gameObject == _segments[0].gameObject) {
+        // Do not collide with our own first segment.
+        // TODO: maybe there's a better way to filter this out while still having the first segment
+        // collide with *other* worms.
+        return;
+      }
+      Debug.Log("KABOOM!");
+      break;
     }
-    var newGameObject = Instantiate(segment, lastSegment.transform.position,
-        lastSegment.transform.rotation);
-    var newSeg = new SegmentRecord(newGameObject);
-    newSeg.targetIndex = index;
-    _segments.Add(newSeg);
   }
 
   public void Start () {
@@ -124,6 +123,29 @@ public class Worm : MonoBehaviour
   /** Make a target with the head's current position and rotation. */
   protected void snapshotTarget () {
     _targets.Add(new Target(this.transform.localPosition, this.transform.eulerAngles.y));
+  }
+
+  /**
+   * Called from a pellet when we've eaten it.
+   */
+  protected void pelletWasEaten () {
+    // duplicate the last segment but 1 unit behind it
+    GameObject lastSegment;
+    int index;
+    if (_segments.Count == 0) {
+      snapshotTarget();
+      lastSegment = gameObject;
+      index = _targets.Count - 1;
+    } else {
+      var seggy = _segments[_segments.Count - 1];
+      lastSegment = seggy.gameObject;
+      index = seggy.targetIndex;
+    }
+    var newGameObject = Instantiate(segment, lastSegment.transform.position,
+        lastSegment.transform.rotation);
+    var newSeg = new SegmentRecord(newGameObject);
+    newSeg.targetIndex = index;
+    _segments.Add(newSeg);
   }
 
   private readonly IList<SegmentRecord> _segments = new List<SegmentRecord>();

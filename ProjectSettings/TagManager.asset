@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Pellet
   - Head
+  - Body
   layers:
   - Default
   - TransparentFX
