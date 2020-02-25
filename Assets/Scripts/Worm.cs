@@ -9,6 +9,9 @@ public class Worm : MonoBehaviour
   /** The object to use for segments. */
   public GameObject segment;
 
+  /** The object to use for glow, when we die. */
+  public GameObject glow;
+
   /** How many segments should we add behind the head? */
   [Range(0, 1000)]
   public int segments = 10;
@@ -36,7 +39,7 @@ public class Worm : MonoBehaviour
         // collide with *other* worms.
         return;
       }
-      Debug.Log("KABOOM!");
+      die();
       break;
     }
   }
@@ -132,6 +135,7 @@ public class Worm : MonoBehaviour
     // duplicate the last segment but 1 unit behind it
     GameObject lastSegment;
     int index;
+    float addDistance = 0;
     if (_segments.Count == 0) {
       snapshotTarget();
       lastSegment = gameObject;
@@ -140,16 +144,49 @@ public class Worm : MonoBehaviour
       var seggy = _segments[_segments.Count - 1];
       lastSegment = seggy.gameObject;
       index = seggy.targetIndex;
+      addDistance = seggy.distance;
     }
     var newGameObject = Instantiate(segment, lastSegment.transform.position,
         lastSegment.transform.rotation);
     var newSeg = new SegmentRecord(newGameObject);
+    newSeg.distance += addDistance;
     newSeg.targetIndex = index;
     _segments.Add(newSeg);
   }
 
+  protected void die () {
+    if (_didDie) {
+      Debug.Log("Re-die?");
+      return;
+    }
+    _didDie = true;
+    Debug.Log("die");
+    // drop a "glow" near each body segment
+    foreach (var seg in _segments) {
+      spawnGlowNear(seg.gameObject);
+      Destroy(seg.gameObject);
+    }
+    _segments.Clear();
+    _targets.Clear();
+
+    // and the head
+    spawnGlowNear(gameObject);
+
+    // reset the head location and rotation
+    transform.SetPositionAndRotation(new Vector3(0, .5f, 0), Quaternion.identity);
+    snapshotTarget();
+  }
+
+  protected void spawnGlowNear (GameObject gobj) {
+    var offset = new Vector3(
+        UnityEngine.Random.Range(-.5f, .5f), 0, UnityEngine.Random.Range(-.5f, .5f));
+    Instantiate(glow, gobj.transform.position + offset, Quaternion.identity);
+  }
+
   private readonly IList<SegmentRecord> _segments = new List<SegmentRecord>();
   private readonly IList<Target> _targets = new List<Target>();
+
+  protected bool _didDie;
 }
 
 class Target {
