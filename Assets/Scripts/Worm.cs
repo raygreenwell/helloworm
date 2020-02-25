@@ -40,9 +40,16 @@ public class Worm : MonoBehaviour
     var newSeg = new SegmentRecord(newGameObject);
     newSeg.targetIndex = index;
     _segments.Add(newSeg);
+
+    // hide the object and collider
+    newGameObject.GetComponent<MeshRenderer>().enabled = false;
+    newGameObject.GetComponent<Collider>().enabled = false;
+    StartCoroutine(waitToShow(newGameObject));
   }
 
   public void Start () {
+    _showDelay = new WaitForSeconds(1 / speed);
+
     for (int ii = 0; ii < segments; ii++) {
       var offset = new Vector3(0, 0, -(ii + 1));
       var newGameObject = Instantiate(segment, transform.position + offset, Quaternion.identity);
@@ -118,8 +125,17 @@ public class Worm : MonoBehaviour
     _targets.Add(new Target(this.transform.localPosition, this.transform.eulerAngles.y));
   }
 
+  protected IEnumerator<object> waitToShow (GameObject gobj) {
+    yield return _showDelay;
+    gobj.GetComponent<Collider>().enabled = true;
+    gobj.GetComponent<MeshRenderer>().enabled = true;
+    yield return null;
+  }
+
   private readonly IList<SegmentRecord> _segments = new List<SegmentRecord>();
   private readonly IList<Target> _targets = new List<Target>();
+
+  private WaitForSeconds _showDelay;
 }
 
 class Target {
