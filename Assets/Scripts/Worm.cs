@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,17 +6,51 @@ public class Worm : MonoBehaviour
 {
   public const bool BOUNCE_OFF_PLANE = false;
 
+  /** The object to use for segments. */
   public GameObject segment;
-  public int length = 10;
+
+  /** How many segments should we add behind the head? */
+  [Range(0, 1000)]
+  public int segments = 10;
+
+  /** Our speed. */
   public float speed = 10f;
+
+  /** Turn speed. */
   public float turnSpeed = 60f;
 
+  /**
+   * Called from a pellet when we've eaten it.
+   */
+  public void PelletWasEaten () {
+    Debug.Log("I ATE THE PELLET!!! (burp)");
+
+    // duplicate the last segment but 1 unit behind it
+    GameObject lastSegment;
+    int index;
+    if (_segments.Count == 0) {
+      snapshotTarget();
+      lastSegment = gameObject;
+      index = _targets.Count - 1;
+    } else {
+      var seggy = _segments[_segments.Count - 1];
+      lastSegment = seggy.gameObject;
+      index = seggy.targetIndex;
+    }
+    var offset = lastSegment.transform.forward * -1;
+    var newGameObject = Instantiate(segment, lastSegment.transform.position + offset,
+        Quaternion.identity);
+    var newSeg = new SegmentRecord(newGameObject);
+    newSeg.targetIndex = index;
+    _segments.Add(newSeg);
+    // TODO : still in progress here
+  }
+
   void Start () {
-    // Skip index 0 because we are inside the "head", just set up the body segments
-    for (int ii = 1; ii < length; ii++) {
+    for (int ii = 0; ii < segments; ii++) {
       var offset = new Vector3(0, 0, -ii);
-      var seggy = Instantiate(segment, transform.position + offset, Quaternion.identity);
-      _segments.Add(new SegmentRecord(seggy));
+      var newGameObject = Instantiate(segment, transform.position + offset, Quaternion.identity);
+      _segments.Add(new SegmentRecord(newGameObject));
     }
 
     snapshotTarget();
@@ -66,10 +99,10 @@ public class Worm : MonoBehaviour
     foreach (var segment in _segments) {
       var segMove = moveDistance;
       var target = _targets[segment.targetIndex];
-      var pos = segment.segment.transform.localPosition;
+      var pos = segment.gameObject.transform.localPosition;
       do {
         var distance = Vector3.Distance(target.position, pos);
-        segment.segment.transform.localPosition =
+        segment.gameObject.transform.localPosition =
             Vector3.MoveTowards(pos, target.position, segMove);
         segMove -= distance;
         if (segMove > 0) {
@@ -78,13 +111,15 @@ public class Worm : MonoBehaviour
           // snapshot a new target if we haven't turned in a while...
           if (segment.targetIndex == _targets.Count) snapshotTarget();
           target = _targets[segment.targetIndex];
-          segment.segment.transform.rotation = Quaternion.Euler(0, target.rotation, 0);
+          segment.gameObject.transform.rotation = Quaternion.Euler(0, target.rotation, 0);
         }
       } while (segMove > 0);
     }
 
     // let's prune things sometimes
-    var toPrune = _segments[_segments.Count - 1].targetIndex;
+    var toPrune = (_segments.Count == 0)
+        ? _targets.Count - 1
+        : _segments[_segments.Count - 1].targetIndex;
     if (toPrune > 0) {
       foreach (var segment in _segments) segment.targetIndex -= toPrune;
       for (; toPrune > 0; --toPrune) _targets.RemoveAt(0);
@@ -113,11 +148,11 @@ class Target {
 }
 
 class SegmentRecord {
-  public readonly GameObject segment;
+  public readonly GameObject gameObject;
   public int targetIndex;
 
-  public SegmentRecord (GameObject segment) {
-    this.segment = segment;
+  public SegmentRecord (GameObject gameObject) {
+    this.gameObject = gameObject;
     this.targetIndex = 0;
   }
 }
