@@ -48,7 +48,7 @@ public class Worm : MonoBehaviour
 
   void Start () {
     for (int ii = 0; ii < segments; ii++) {
-      var offset = new Vector3(0, 0, -ii);
+      var offset = new Vector3(0, 0, -(ii + 1));
       var newGameObject = Instantiate(segment, transform.position + offset, Quaternion.identity);
       _segments.Add(new SegmentRecord(newGameObject));
     }
