@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: 4594067632138193065}
   - component: {fileID: 2897019934474247518}
   - component: {fileID: 3577175283799525802}
-  - component: {fileID: 7117495242605590722}
   - component: {fileID: 2452812217342796535}
+  - component: {fileID: 7117495242605590722}
   m_Layer: 0
   m_Name: PowerPellet
   m_TagString: Pellet
@@ -93,18 +93,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &7117495242605590722
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3969706886210707843}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 021a36f922d0f4c39933c21705fbd33a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!54 &2452812217342796535
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -121,3 +109,15 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &7117495242605590722
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3969706886210707843}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 021a36f922d0f4c39933c21705fbd33a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
