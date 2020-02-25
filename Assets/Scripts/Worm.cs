@@ -38,11 +38,11 @@ public class Worm : MonoBehaviour
         // collide with *other* worms.
         if (collider.gameObject == _segments[0].gameObject) return;
 
-        // if the segment we've collided with is currently ticking down "distance" then that
+        // if the segment we've collided with is currently ticking down "waitDistance" then that
         // means it was just added and it's close to the head and we should definitely ignore it.
         for (var ii = _segments.Count - 1; ii >= 0; ii--) {
           var seg = _segments[ii];
-          if (seg.distance == 0) break;
+          if (seg.waitDistance == 0) break;
           if (seg.gameObject == collider.gameObject) return;
         }
       }
@@ -57,7 +57,7 @@ public class Worm : MonoBehaviour
       var offset = new Vector3(0, 0, -(ii + 1));
       var newGameObject = Instantiate(segment, transform.position + offset, Quaternion.identity);
       var newSeg = new SegmentRecord(newGameObject);
-      newSeg.distance = 0;
+      newSeg.waitDistance = 0;
       _segments.Add(newSeg);
     }
 
@@ -97,11 +97,11 @@ public class Worm : MonoBehaviour
     // now visit each segment and interpolate it towards its next target
     foreach (var segment in _segments) {
       var segMove = moveDistance;
-      if (segment.distance > 0) {
-        var didMove = Math.Min(segment.distance, segMove);
-        segment.distance -= didMove;
-        if (segment.distance > 0) continue;
-        segMove -= didMove;
+      if (segment.waitDistance > 0) {
+        var waitMoveAmount = Math.Min(segment.waitDistance, segMove);
+        segment.waitDistance -= waitMoveAmount;
+        if (segment.waitDistance > 0) continue;
+        segMove -= waitMoveAmount;
       }
       var target = _targets[segment.targetIndex];
       var pos = segment.gameObject.transform.localPosition;
@@ -152,12 +152,12 @@ public class Worm : MonoBehaviour
       var seggy = _segments[_segments.Count - 1];
       lastSegment = seggy.gameObject;
       index = seggy.targetIndex;
-      addDistance = seggy.distance;
+      addDistance = seggy.waitDistance;
     }
     var newGameObject = Instantiate(segment, lastSegment.transform.position,
         lastSegment.transform.rotation);
     var newSeg = new SegmentRecord(newGameObject);
-    newSeg.distance += addDistance;
+    newSeg.waitDistance += addDistance;
     newSeg.targetIndex = index;
     _segments.Add(newSeg);
   }
@@ -202,7 +202,7 @@ class Target {
 class SegmentRecord {
   public readonly GameObject gameObject;
   public int targetIndex = 0;
-  public float distance = 1f;
+  public float waitDistance = 1f;
 
   public SegmentRecord (GameObject gameObject) {
     this.gameObject = gameObject;
