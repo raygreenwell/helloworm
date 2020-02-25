@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -23,8 +22,6 @@ public class Worm : MonoBehaviour
    * Called from a pellet when we've eaten it.
    */
   public void PelletWasEaten () {
-    Debug.Log("I ATE THE PELLET!!! (burp)");
-
     // duplicate the last segment but 1 unit behind it
     GameObject lastSegment;
     int index;
@@ -43,10 +40,9 @@ public class Worm : MonoBehaviour
     var newSeg = new SegmentRecord(newGameObject);
     newSeg.targetIndex = index;
     _segments.Add(newSeg);
-    // TODO : still in progress here
   }
 
-  void Start () {
+  public void Start () {
     for (int ii = 0; ii < segments; ii++) {
       var offset = new Vector3(0, 0, -(ii + 1));
       var newGameObject = Instantiate(segment, transform.position + offset, Quaternion.identity);
@@ -56,7 +52,7 @@ public class Worm : MonoBehaviour
     snapshotTarget();
   }
 
-  void Update () {
+  public void Update () {
     var turn = Input.GetAxis("Horizontal");
     if (turn != 0) {
       #pragma warning disable CS0162 // unreachable code

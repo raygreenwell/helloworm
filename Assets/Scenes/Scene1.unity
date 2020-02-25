@@ -145,7 +145,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   segment: {fileID: 9015287136751095267, guid: 0b9d1cc22fa4b4d748a389dfda3d743f, type: 3}
-  segments: 100
+  segments: 1
   speed: 10
   turnSpeed: 60
 --- !u!135 &163965257
@@ -418,6 +418,53 @@ LookAtConstraint:
   m_Sources:
   - sourceTransform: {fileID: 163965260}
     weight: 1
+--- !u!1 &725840441
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 725840443}
+  - component: {fileID: 725840442}
+  m_Layer: 0
+  m_Name: PelletSpawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &725840442
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 725840441}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36d7082d21cf84301afb0b3f1b43e7c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pellet: {fileID: 3969706886210707843, guid: f48c9a7d9fa754a73bd2a0a6701fa106, type: 3}
+  minExtent: {x: -100, y: 0.5, z: -100}
+  maxExtent: {x: 100, y: 0.5, z: 100}
+  frequency: 1
+--- !u!4 &725840443
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 725840441}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2093772101
 GameObject:
   m_ObjectHideFlags: 0
