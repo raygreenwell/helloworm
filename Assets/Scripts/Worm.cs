@@ -55,7 +55,7 @@ public class Worm : MonoBehaviour
   public void Update () {
     var turn = Input.GetAxis("Horizontal");
     if (turn != 0) {
-      transform.Rotate(new Vector3(0, turn * turnSpeed * Time.deltaTime));
+      transform.Rotate(new Vector3(0, turn * turnSpeed * Time.deltaTime, 0));
     }
 
     var moveDistance = Time.deltaTime * speed;
