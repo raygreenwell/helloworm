@@ -31,7 +31,7 @@ public class Worm : MonoBehaviour
     case "Pickup":
       var attrs = collider.gameObject.GetComponent<PickupAttrs>();
       var power = (attrs == null) ? 1f : attrs.power;
-      pelletWasEaten(power);
+      pickupConsumed(power);
       Destroy(collider.gameObject);
       break;
 
@@ -138,7 +138,7 @@ public class Worm : MonoBehaviour
     _targets.Add(new Target(this.transform.localPosition, this.transform.eulerAngles.y));
   }
 
-  protected void pelletWasEaten (float power) {
+  protected void pickupConsumed (float power) {
     _length += power;
     var targetSegments = Math.Floor(_length);
     while (targetSegments > _segments.Count) {
@@ -175,7 +175,7 @@ public class Worm : MonoBehaviour
   protected void dropSegment () {
     var lastIndex = _segments.Count - 1;
     var seg = _segments[lastIndex];
-    spawnGlowAt(seg.gameObject.transform.position + (seg.gameObject.transform.forward * -1));
+    spawnGlowAt(seg.gameObject.transform.position + (seg.gameObject.transform.forward * -1), 1f);
     _segments.RemoveAt(lastIndex);
     Destroy(seg.gameObject);
   }
