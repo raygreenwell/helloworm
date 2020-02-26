@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class Worm : MonoBehaviour
 {
-  public const bool BOUNCE_OFF_PLANE = false;
-
   /** The object to use for segments. */
   public GameObject segment;
 
@@ -72,22 +70,6 @@ public class Worm : MonoBehaviour
 
     // now, move the head forward
     transform.Translate(Vector3.forward * moveDistance);
-    #pragma warning disable CS0162 // unreachable code
-    if (BOUNCE_OFF_PLANE) {
-      var wloc = transform.position;
-      if (wloc.y < .5) {
-        wloc.y = 5f;
-        transform.position = wloc;
-        var body = GetComponent<Rigidbody>();
-        var vel = body.velocity;
-        if (vel.y < 0) {
-          vel.y *= -1;
-          body.velocity = vel;
-          Debug.Log("BOinG!");
-        }
-      }
-    }
-    #pragma warning restore CS0162 // unreachable code
 
     // if rotation changed, make a new Target.
     if (turn != 0) snapshotTarget();
