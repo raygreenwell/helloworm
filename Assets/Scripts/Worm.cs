@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Worm : MonoBehaviour
 {
+  public const float DEFAULT_POWER = .75f;
+
   /** The object to use for segments. */
   public GameObject segment;
 
@@ -19,6 +21,10 @@ public class Worm : MonoBehaviour
 
   /** Turn speed. */
   public float turnSpeed = 60f;
+
+  public float boostSpeedFactor = 2.5f;
+
+  public float boostLengthLoss = 2f;
 
   public void OnTriggerEnter (Collider collider) {
     switch (collider.tag) {
@@ -58,6 +64,7 @@ public class Worm : MonoBehaviour
       newSeg.waitDistance = 0;
       _segments.Add(newSeg);
     }
+    _length = segments;
 
     snapshotTarget();
   }
@@ -69,6 +76,12 @@ public class Worm : MonoBehaviour
     }
 
     var moveDistance = Time.deltaTime * speed;
+    var lengthAdjusted = false;
+    if (Input.GetButton("Jump") && _length >= 1) {
+      _length = Math.Max(0, _length - (boostLengthLoss * Time.deltaTime));
+      moveDistance *= boostSpeedFactor;
+      lengthAdjusted = true;
+    }
 
     // now, move the head forward
     transform.Translate(Vector3.forward * moveDistance);
@@ -111,6 +124,13 @@ public class Worm : MonoBehaviour
       foreach (var segment in _segments) segment.targetIndex -= toPrune;
       for (; toPrune > 0; --toPrune) _targets.RemoveAt(0);
     }
+
+    if (lengthAdjusted) {
+      var targetSegments = Math.Floor(_length);
+      while (targetSegments < _segments.Count) {
+        dropSegment();
+      }
+    }
   }
 
   /** Make a target with the head's current position and rotation. */
@@ -120,7 +140,7 @@ public class Worm : MonoBehaviour
 
   protected void pelletWasEaten (float power) {
     _length += power;
-    var targetSegments = Math.Floor(_length) - 1;
+    var targetSegments = Math.Floor(_length);
     while (targetSegments > _segments.Count) {
       addSegment();
     }
@@ -152,6 +172,14 @@ public class Worm : MonoBehaviour
     _segments.Add(newSeg);
   }
 
+  protected void dropSegment () {
+    var lastIndex = _segments.Count - 1;
+    var seg = _segments[lastIndex];
+    spawnGlowAt(seg.gameObject.transform.position + (seg.gameObject.transform.forward * -1));
+    _segments.RemoveAt(lastIndex);
+    Destroy(seg.gameObject);
+  }
+
   protected void die () {
     // drop a "glow" near each body segment
     foreach (var seg in _segments) {
@@ -166,17 +194,30 @@ public class Worm : MonoBehaviour
 
     // reset the head location and rotation
     transform.SetPositionAndRotation(new Vector3(0, .5f, 0), Quaternion.identity);
-    _length = 1;
+    _length = 0;
     snapshotTarget();
   }
 
-  protected void spawnGlowNear (GameObject gobj) {
+  protected void spawnGlowNear (GameObject gobj, float power = DEFAULT_POWER) {
     var offset = new Vector3(
         UnityEngine.Random.Range(-.5f, .5f), 0, UnityEngine.Random.Range(-.5f, .5f));
-    Instantiate(glow, gobj.transform.position + offset, Quaternion.identity);
+    spawnGlowAt(gobj.transform.position + offset);
   }
 
-  protected float _length = 1;
+  protected void spawnGlowAt (Vector3 world, float power = DEFAULT_POWER) {
+    var newGlow = Instantiate(glow, world, Quaternion.identity);
+    if (power != DEFAULT_POWER) {
+      var attrs = newGlow.GetComponent<PickupAttrs>();
+      if (attrs == null) {
+        throw new ArgumentException("Glow prefab has no PickupAttrs?"); // we could instead add it
+        // newGlow.AddComponent<PickupAttrs>();
+      }
+      attrs.power = power;
+    }
+  }
+
+  /** Our length, excluding the head. */
+  protected float _length = 0;
 
   private readonly IList<SegmentRecord> _segments = new List<SegmentRecord>();
   private readonly IList<Target> _targets = new List<Target>();
