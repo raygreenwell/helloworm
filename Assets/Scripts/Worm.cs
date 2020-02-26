@@ -29,9 +29,7 @@ public class Worm : MonoBehaviour
   public void OnTriggerEnter (Collider collider) {
     switch (collider.tag) {
     case "Pickup":
-      var attrs = collider.gameObject.GetComponent<PickupAttrs>();
-      var power = (attrs == null) ? DEFAULT_POWER : attrs.power;
-      pickupConsumed(power);
+      pickupConsumed(collider.gameObject.GetComponent<PickupAttrs>());
       Destroy(collider.gameObject);
       break;
 
@@ -138,7 +136,8 @@ public class Worm : MonoBehaviour
     _targets.Add(new Target(this.transform.localPosition, this.transform.eulerAngles.y));
   }
 
-  protected void pickupConsumed (float power) {
+  protected void pickupConsumed (PickupAttrs attrs) {
+    var power = (attrs == null) ? DEFAULT_POWER : attrs.power;
     _length += power;
     var targetSegments = Math.Floor(_length);
     while (targetSegments > _segments.Count) {
@@ -183,14 +182,14 @@ public class Worm : MonoBehaviour
   protected void die () {
     // drop a "glow" near each body segment
     foreach (var seg in _segments) {
-      spawnGlowNear(seg.gameObject, .75f);
+      spawnGlowNear(seg.gameObject, UnityEngine.Random.Range(.75f, 1.25f));
       Destroy(seg.gameObject);
     }
     _segments.Clear();
     _targets.Clear();
 
     // and the head
-    spawnGlowNear(gameObject, .75f);
+    spawnGlowNear(gameObject, UnityEngine.Random.Range(.75f, 1.25f));
 
     // reset the head location and rotation
     transform.SetPositionAndRotation(new Vector3(0, .5f, 0), Quaternion.identity);
