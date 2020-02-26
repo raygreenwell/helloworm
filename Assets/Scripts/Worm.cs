@@ -23,8 +23,6 @@ public class Worm : MonoBehaviour
   public float turnSpeed = 60f;
 
   public void OnTriggerEnter (Collider collider) {
-    if (collider.tag == null) return;
-
     switch (collider.tag) {
     case "Pellet":
       pelletWasEaten();
