@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class Worm : MonoBehaviour
 {
-  public const float DEFAULT_POWER = 1f;
-
   /** The object to use for segments. */
   public GameObject segment;
 
@@ -137,7 +135,7 @@ public class Worm : MonoBehaviour
   }
 
   protected void pickupConsumed (PickupAttrs attrs) {
-    var power = (attrs == null) ? DEFAULT_POWER : attrs.power;
+    var power = (attrs == null) ? PickupAttrs.DEFAULT_POWER : attrs.power;
     _length += power;
     var targetSegments = Math.Floor(_length);
     while (targetSegments > _segments.Count) {
@@ -197,15 +195,15 @@ public class Worm : MonoBehaviour
     snapshotTarget();
   }
 
-  protected void spawnGlowNear (GameObject gobj, float power = DEFAULT_POWER) {
+  protected void spawnGlowNear (GameObject gobj, float power = PickupAttrs.DEFAULT_POWER) {
     var offset = new Vector3(
         UnityEngine.Random.Range(-.5f, .5f), 0, UnityEngine.Random.Range(-.5f, .5f));
     spawnGlowAt(gobj.transform.position + offset, power);
   }
 
-  protected void spawnGlowAt (Vector3 world, float power = DEFAULT_POWER) {
+  protected void spawnGlowAt (Vector3 world, float power = PickupAttrs.DEFAULT_POWER) {
     var newGlow = Instantiate(glow, world, Quaternion.identity);
-    if (power != DEFAULT_POWER) {
+    if (power != PickupAttrs.DEFAULT_POWER) {
       newGlow.transform.localScale *= power;
       var attrs = newGlow.GetComponent<PickupAttrs>();
       if (attrs == null) {
