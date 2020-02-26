@@ -207,6 +207,7 @@ public class Worm : MonoBehaviour
   protected void spawnGlowAt (Vector3 world, float power = DEFAULT_POWER) {
     var newGlow = Instantiate(glow, world, Quaternion.identity);
     if (power != DEFAULT_POWER) {
+      newGlow.transform.localScale *= power;
       var attrs = newGlow.GetComponent<PickupAttrs>();
       if (attrs == null) {
         attrs = newGlow.AddComponent<PickupAttrs>();
