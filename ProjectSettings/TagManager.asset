@@ -4,9 +4,9 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Pellet
   - Head
   - Body
+  - Pickup
   layers:
   - Default
   - TransparentFX

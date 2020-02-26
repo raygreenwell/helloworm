@@ -22,8 +22,10 @@ public class Worm : MonoBehaviour
 
   public void OnTriggerEnter (Collider collider) {
     switch (collider.tag) {
-    case "Pellet":
-      pelletWasEaten();
+    case "Pickup":
+      var attrs = collider.gameObject.GetComponent<PickupAttrs>();
+      var power = (attrs == null) ? 1f : attrs.power;
+      pelletWasEaten(power);
       Destroy(collider.gameObject);
       break;
 
@@ -116,10 +118,18 @@ public class Worm : MonoBehaviour
     _targets.Add(new Target(this.transform.localPosition, this.transform.eulerAngles.y));
   }
 
+  protected void pelletWasEaten (float power) {
+    _length += power;
+    var targetSegments = Math.Floor(_length) - 1;
+    while (targetSegments > _segments.Count) {
+      addSegment();
+    }
+  }
+
   /**
    * Called from a pellet when we've eaten it.
    */
-  protected void pelletWasEaten () {
+  protected void addSegment () {
     // duplicate the last segment but 1 unit behind it
     GameObject lastSegment;
     int index;
@@ -156,6 +166,7 @@ public class Worm : MonoBehaviour
 
     // reset the head location and rotation
     transform.SetPositionAndRotation(new Vector3(0, .5f, 0), Quaternion.identity);
+    _length = 1;
     snapshotTarget();
   }
 
@@ -164,6 +175,8 @@ public class Worm : MonoBehaviour
         UnityEngine.Random.Range(-.5f, .5f), 0, UnityEngine.Random.Range(-.5f, .5f));
     Instantiate(glow, gobj.transform.position + offset, Quaternion.identity);
   }
+
+  protected float _length = 1;
 
   private readonly IList<SegmentRecord> _segments = new List<SegmentRecord>();
   private readonly IList<Target> _targets = new List<Target>();
