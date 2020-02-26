@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Worm : MonoBehaviour
 {
-  public const float DEFAULT_POWER = .75f;
+  public const float DEFAULT_POWER = 1f;
 
   /** The object to use for segments. */
   public GameObject segment;
@@ -30,7 +30,7 @@ public class Worm : MonoBehaviour
     switch (collider.tag) {
     case "Pickup":
       var attrs = collider.gameObject.GetComponent<PickupAttrs>();
-      var power = (attrs == null) ? 1f : attrs.power;
+      var power = (attrs == null) ? DEFAULT_POWER : attrs.power;
       pickupConsumed(power);
       Destroy(collider.gameObject);
       break;
@@ -175,7 +175,7 @@ public class Worm : MonoBehaviour
   protected void dropSegment () {
     var lastIndex = _segments.Count - 1;
     var seg = _segments[lastIndex];
-    spawnGlowAt(seg.gameObject.transform.position + (seg.gameObject.transform.forward * -1), 1f);
+    spawnGlowAt(seg.gameObject.transform.position + (seg.gameObject.transform.forward * -1));
     _segments.RemoveAt(lastIndex);
     Destroy(seg.gameObject);
   }
@@ -183,14 +183,14 @@ public class Worm : MonoBehaviour
   protected void die () {
     // drop a "glow" near each body segment
     foreach (var seg in _segments) {
-      spawnGlowNear(seg.gameObject);
+      spawnGlowNear(seg.gameObject, .75f);
       Destroy(seg.gameObject);
     }
     _segments.Clear();
     _targets.Clear();
 
     // and the head
-    spawnGlowNear(gameObject);
+    spawnGlowNear(gameObject, .75f);
 
     // reset the head location and rotation
     transform.SetPositionAndRotation(new Vector3(0, .5f, 0), Quaternion.identity);
@@ -201,7 +201,7 @@ public class Worm : MonoBehaviour
   protected void spawnGlowNear (GameObject gobj, float power = DEFAULT_POWER) {
     var offset = new Vector3(
         UnityEngine.Random.Range(-.5f, .5f), 0, UnityEngine.Random.Range(-.5f, .5f));
-    spawnGlowAt(gobj.transform.position + offset);
+    spawnGlowAt(gobj.transform.position + offset, power);
   }
 
   protected void spawnGlowAt (Vector3 world, float power = DEFAULT_POWER) {
@@ -209,8 +209,7 @@ public class Worm : MonoBehaviour
     if (power != DEFAULT_POWER) {
       var attrs = newGlow.GetComponent<PickupAttrs>();
       if (attrs == null) {
-        throw new ArgumentException("Glow prefab has no PickupAttrs?"); // we could instead add it
-        // newGlow.AddComponent<PickupAttrs>();
+        attrs = newGlow.AddComponent<PickupAttrs>();
       }
       attrs.power = power;
     }
