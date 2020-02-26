@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class Worm : MonoBehaviour
 {
+  /** The minimum number of segments allowable. */
+  public const int MIN_SEGMENTS = 5;
+
   /** The object to use for segments. */
   public GameObject segment;
 
@@ -11,7 +14,7 @@ public class Worm : MonoBehaviour
   public GameObject glow;
 
   /** How many segments should we add behind the head? */
-  [Range(0, 1000)]
+  [Range(MIN_SEGMENTS, int.MaxValue)]
   public int segments = 10;
 
   /** Our speed. */
@@ -73,8 +76,8 @@ public class Worm : MonoBehaviour
 
     var moveDistance = Time.deltaTime * speed;
     var lengthAdjusted = false;
-    if (Input.GetButton("Jump") && _length >= 1) {
-      _length = Math.Max(0, _length - (boostLengthLoss * Time.deltaTime));
+    if (Input.GetButton("Jump") && _length >= (MIN_SEGMENTS + 1)) {
+      _length = Math.Max(MIN_SEGMENTS, _length - (boostLengthLoss * Time.deltaTime));
       moveDistance *= boostSpeedFactor;
       lengthAdjusted = true;
     }
