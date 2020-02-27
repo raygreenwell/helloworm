@@ -29,12 +29,21 @@ public class Worm : MonoBehaviour
 
   public void OnTriggerEnter (Collider collider) {
     switch (collider.tag) {
+    case "Untagged":
+      // Do nothing.
+      Debug.Log("We shouldn't be hitting untagged objects");
+      break;
+
     case "Pickup":
       pickupConsumed(collider.gameObject.GetComponent<PickupAttrs>());
       Destroy(collider.gameObject);
       break;
 
-    case "Body":
+    default:
+      if (gameObject.tag == collider.tag) {
+        Debug.Log("Can't collide with same tag");
+      }
+      Debug.Log("hit collider: " + collider.tag);
       if (_segments.Count > 0) {
         // Do not collide with our own first segment.
         // TODO: maybe there's a better way to filter this out while still having the first segment
@@ -56,16 +65,9 @@ public class Worm : MonoBehaviour
   }
 
   public void Start () {
-    for (int ii = 0; ii < segments; ii++) {
-      var offset = new Vector3(0, 0, -(ii + 1));
-      var newGameObject = Instantiate(segment, transform.position + offset, Quaternion.identity);
-      var newSeg = new SegmentRecord(newGameObject);
-      newSeg.waitDistance = 0;
-      _segments.Add(newSeg);
-    }
-    _length = segments;
-
     snapshotTarget();
+    // fake a pickup so that we grow when we start
+    pickupConsumed(new BarePickupAttrs(this.segments));
   }
 
   public void Update () {
@@ -137,8 +139,9 @@ public class Worm : MonoBehaviour
     _targets.Add(new Target(this.transform.localPosition, this.transform.eulerAngles.y));
   }
 
-  protected void pickupConsumed (PickupAttrs attrs) {
-    var power = (attrs == null) ? PickupAttrs.DEFAULT_POWER : attrs.power;
+  protected void pickupConsumed (IPickupAttrs attrs) {
+    var power = (attrs == null) ? PickupAttrs.DEFAULT_POWER : attrs.getPower();
+    Debug.Log("Power is " + power + ", attrs is null: " + (attrs == null));
     _length += power;
     var targetSegments = Math.Floor(_length);
     while (targetSegments > _segments.Count) {
@@ -181,6 +184,7 @@ public class Worm : MonoBehaviour
   }
 
   protected void die () {
+    Debug.Log("DIE!");
     // drop a "glow" near each body segment
     foreach (var seg in _segments) {
       spawnGlowNear(seg.gameObject, UnityEngine.Random.Range(.75f, 1.25f));
@@ -195,7 +199,9 @@ public class Worm : MonoBehaviour
     // reset the head location and rotation
     transform.SetPositionAndRotation(new Vector3(0, .5f, 0), Quaternion.identity);
     _length = 0;
-    snapshotTarget();
+
+    // call Start again to reset some other stuff
+    Start();
   }
 
   protected void spawnGlowNear (GameObject gobj, float power = PickupAttrs.DEFAULT_POWER) {
