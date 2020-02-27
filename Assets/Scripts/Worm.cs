@@ -21,7 +21,7 @@ public class Worm : MonoBehaviour
   public float speed = 10f;
 
   /** Turn speed. */
-  public float turnSpeed = 60f;
+  public float turnSpeed = 500f;
 
   public float boostSpeedFactor = 2.5f;
 

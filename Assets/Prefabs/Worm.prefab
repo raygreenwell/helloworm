@@ -109,7 +109,7 @@ MonoBehaviour:
   glow: {fileID: 7167046098052358759, guid: 7480ef7a652594bfa99525c02d84800d, type: 3}
   segments: 5
   speed: 10
-  turnSpeed: 60
+  turnSpeed: 500
   boostSpeedFactor: 2.5
   boostLengthLoss: 2
 --- !u!54 &9180071505763023817
