@@ -67,7 +67,7 @@ public class Worm : MonoBehaviour
   public void Start () {
     snapshotTarget();
     // fake a pickup so that we grow when we start
-    pickupConsumed(new BarePickupAttrs(this.segments));
+    pickupConsumed(this.segments);
   }
 
   public void Update () {
@@ -139,9 +139,11 @@ public class Worm : MonoBehaviour
     _targets.Add(new Target(this.transform.localPosition, this.transform.eulerAngles.y));
   }
 
-  protected void pickupConsumed (IPickupAttrs attrs) {
-    var power = (attrs == null) ? PickupAttrs.DEFAULT_POWER : attrs.getPower();
-    Debug.Log("Power is " + power + ", attrs is null: " + (attrs == null));
+  protected void pickupConsumed (PickupAttrs attrs) {
+    pickupConsumed((attrs == null) ? PickupAttrs.DEFAULT_POWER : attrs.power);
+  }
+
+  protected void pickupConsumed (float power) {
     _length += power;
     var targetSegments = Math.Floor(_length);
     while (targetSegments > _segments.Count) {

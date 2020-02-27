@@ -53,8 +53,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Scripts\BarePickupAttrs.cs" />
-     <Compile Include="Assets\Scripts\IPickupAttrs.cs" />
      <Compile Include="Assets\Scripts\PelletSpawner.cs" />
      <Compile Include="Assets\Scripts\PickupAttrs.cs" />
      <Compile Include="Assets\Scripts\Worm.cs" />
