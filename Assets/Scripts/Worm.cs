@@ -140,7 +140,7 @@ public class Worm : MonoBehaviour
   }
 
   protected void pickupConsumed (PickupAttrs attrs) {
-    pickupConsumed((attrs == null) ? PickupAttrs.DEFAULT_POWER : attrs.power);
+    pickupConsumed(attrs?.power ?? PickupAttrs.DEFAULT_POWER);
   }
 
   protected void pickupConsumed (float power) {
