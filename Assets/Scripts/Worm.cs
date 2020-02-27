@@ -216,10 +216,7 @@ public class Worm : MonoBehaviour
     var newGlow = Instantiate(glow, world, Quaternion.identity);
     if (power != PickupAttrs.DEFAULT_POWER) {
       newGlow.transform.localScale *= power;
-      var attrs = newGlow.GetComponent<PickupAttrs>();
-      if (attrs == null) {
-        attrs = newGlow.AddComponent<PickupAttrs>();
-      }
+      var attrs = newGlow.GetComponent<PickupAttrs>() ?? newGlow.AddComponent<PickupAttrs>();
       attrs.power = power;
     }
   }
