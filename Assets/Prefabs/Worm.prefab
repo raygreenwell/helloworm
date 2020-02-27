@@ -106,10 +106,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   segment: {fileID: 9015287136751095267, guid: 0b9d1cc22fa4b4d748a389dfda3d743f, type: 3}
-  glow: {fileID: 3969706886210707843, guid: f48c9a7d9fa754a73bd2a0a6701fa106, type: 3}
-  segments: 100
+  glow: {fileID: 7167046098052358759, guid: 7480ef7a652594bfa99525c02d84800d, type: 3}
+  segments: 5
   speed: 10
   turnSpeed: 60
+  boostSpeedFactor: 2.5
+  boostLengthLoss: 2
 --- !u!54 &9180071505763023817
 Rigidbody:
   m_ObjectHideFlags: 0

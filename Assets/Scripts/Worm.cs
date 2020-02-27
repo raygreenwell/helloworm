@@ -14,8 +14,8 @@ public class Worm : MonoBehaviour
   public GameObject glow;
 
   /** How many segments should we add behind the head? */
-  [Range(MIN_SEGMENTS, int.MaxValue)]
-  public int segments = 10;
+  [Range(MIN_SEGMENTS, 1000)]
+  public int segments = MIN_SEGMENTS;
 
   /** Our speed. */
   public float speed = 10f;
