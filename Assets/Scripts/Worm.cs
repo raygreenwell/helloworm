@@ -30,9 +30,7 @@ public class Worm : MonoBehaviour
   public void OnTriggerEnter (Collider collider) {
     switch (collider.tag) {
     case "Untagged":
-      // Do nothing.
-      Debug.Log("We shouldn't be hitting untagged objects");
-      break;
+      return;
 
     case "Pickup":
       pickupConsumed(collider.gameObject.GetComponent<PickupAttrs>());
@@ -40,25 +38,9 @@ public class Worm : MonoBehaviour
       break;
 
     default:
-      if (gameObject.tag == collider.tag) {
-        Debug.Log("Can't collide with same tag");
-      }
-      Debug.Log("hit collider: " + collider.tag);
-      if (_segments.Count > 0) {
-        // Do not collide with our own first segment.
-        // TODO: maybe there's a better way to filter this out while still having the first segment
-        // collide with *other* worms.
-        if (collider.gameObject == _segments[0].gameObject) return;
-
-        // if the segment we've collided with is currently ticking down "waitDistance" then that
-        // means it was just added and it's close to the head and we should definitely ignore it.
-        for (var ii = _segments.Count - 1; ii >= 0; ii--) {
-          var seg = _segments[ii];
-          if (seg.waitDistance == 0) break;
-          if (seg.gameObject == collider.gameObject) return;
-        }
-      }
-      //Debug.Log("Got smacked by obj at " + collider.gameObject.transform.position);
+      if (gameObject.tag == collider.tag) return;
+      //Debug.Log("Got smacked by obj (" + collider.tag + ") at " +
+      //    collider.gameObject.transform.position);
       die();
       break;
     }
@@ -171,6 +153,7 @@ public class Worm : MonoBehaviour
     }
     var newGameObject = Instantiate(segment, lastSegment.transform.position,
         lastSegment.transform.rotation);
+    newGameObject.tag = tag; // copy our tag to the segment
     var newSeg = new SegmentRecord(newGameObject);
     newSeg.waitDistance += addDistance;
     newSeg.targetIndex = index;
