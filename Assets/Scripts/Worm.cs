@@ -27,6 +27,11 @@ public class Worm : MonoBehaviour
 
   public float boostLengthLoss = 2f;
 
+  public void steer (float turn, bool boost) {
+    _turn = turn;
+    _boost = boost;
+  }
+
   public void OnTriggerEnter (Collider collider) {
     switch (collider.tag) {
     case "Untagged":
@@ -53,14 +58,13 @@ public class Worm : MonoBehaviour
   }
 
   public void Update () {
-    var turn = Input.GetAxis("Horizontal");
-    if (turn != 0) {
-      transform.Rotate(new Vector3(0, turn * turnSpeed * Time.deltaTime, 0));
+    if (_turn != 0) {
+      transform.Rotate(new Vector3(0, _turn * turnSpeed * Time.deltaTime, 0));
     }
 
     var moveDistance = Time.deltaTime * speed;
     var lengthAdjusted = false;
-    if (Input.GetButton("Jump") && _length >= (MIN_SEGMENTS + 1)) {
+    if (_boost && _length >= (MIN_SEGMENTS + 1)) {
       _length = Math.Max(MIN_SEGMENTS, _length - (boostLengthLoss * Time.deltaTime));
       moveDistance *= boostSpeedFactor;
       lengthAdjusted = true;
@@ -70,7 +74,7 @@ public class Worm : MonoBehaviour
     transform.Translate(Vector3.forward * moveDistance);
 
     // if rotation changed, make a new Target.
-    if (turn != 0) snapshotTarget();
+    if (_turn != 0) snapshotTarget();
 
     // now visit each segment and interpolate it towards its next target
     foreach (var segment in _segments) {
@@ -114,6 +118,9 @@ public class Worm : MonoBehaviour
         dropSegment();
       }
     }
+
+    // auto-clear?
+    _turn = 0; _boost = false;
   }
 
   /** Make a target with the head's current position and rotation. */
@@ -206,6 +213,9 @@ public class Worm : MonoBehaviour
 
   /** Our length, excluding the head. */
   protected float _length = 0;
+
+  protected float _turn;
+  protected bool _boost;
 
   private readonly IList<SegmentRecord> _segments = new List<SegmentRecord>();
   private readonly IList<Target> _targets = new List<Target>();

@@ -53,6 +53,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Scripts\AiWormSteering.cs" />
+     <Compile Include="Assets\Scripts\LocalPlayerWormSteering.cs" />
      <Compile Include="Assets\Scripts\PelletSpawner.cs" />
      <Compile Include="Assets\Scripts\PickupAttrs.cs" />
      <Compile Include="Assets\Scripts\Worm.cs" />
