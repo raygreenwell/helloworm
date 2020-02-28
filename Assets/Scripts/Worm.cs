@@ -55,6 +55,8 @@ public class Worm : MonoBehaviour
   }
 
   public void Start () {
+    _scale.Set(1, 1, 1);
+    transform.localScale = _scale;
     snapshotTarget();
     // fake a pickup so that we grow when we start
     pickupConsumed(this.segments);
@@ -120,10 +122,22 @@ public class Worm : MonoBehaviour
       while (targetSegments < _segments.Count) {
         dropSegment();
       }
+      updateScale();
     }
 
     // auto-clear?
     _turn = 0; _boost = false;
+  }
+
+  protected void updateScale () {
+    // at the minimum length we have scale = 1, go up from there.
+    var scale = (float)Math.Log10(10 + (_length - MIN_SEGMENTS));
+    _scale.Set(scale, scale, scale);
+
+    transform.localScale = _scale;
+    foreach (var segment in _segments) {
+      segment.gameObject.transform.localScale = _scale;
+    }
   }
 
   /** Make a target with the head's current position and rotation. */
@@ -137,6 +151,7 @@ public class Worm : MonoBehaviour
 
   protected void pickupConsumed (float power) {
     _length += power;
+    updateScale();
     var targetSegments = Math.Floor(_length);
     while (targetSegments > _segments.Count) {
       addSegment();
@@ -163,6 +178,7 @@ public class Worm : MonoBehaviour
     }
     var newGameObject = Instantiate(segment, lastSegment.transform.position,
         lastSegment.transform.rotation);
+    newGameObject.transform.localScale = _scale;
     newGameObject.tag = tag; // copy our tag to the segment
     var newSeg = new SegmentRecord(newGameObject);
     newSeg.waitDistance += addDistance;
@@ -216,6 +232,8 @@ public class Worm : MonoBehaviour
 
   /** Our length, excluding the head. */
   protected float _length = 0;
+  /** Our scale. */
+  protected Vector3 _scale = new Vector3(1, 1, 1);
 
   protected float _turn;
   protected bool _boost;

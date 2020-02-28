@@ -631,5 +631,10 @@ PrefabInstance:
       propertyPath: respawn.y
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 9180071505763023820, guid: b22471d4ced8d41baadfe0c391d0f9ba,
+        type: 3}
+      propertyPath: segments
+      value: 5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b22471d4ced8d41baadfe0c391d0f9ba, type: 3}
