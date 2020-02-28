@@ -129,11 +129,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: AiWorm
       objectReference: {fileID: 0}
-    - target: {fileID: 9180071505763023811, guid: b22471d4ced8d41baadfe0c391d0f9ba,
-        type: 3}
-      propertyPath: m_TagString
-      value: Player2
-      objectReference: {fileID: 0}
     - target: {fileID: 9180071505763023816, guid: b22471d4ced8d41baadfe0c391d0f9ba,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -628,11 +623,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Player1Worm
-      objectReference: {fileID: 0}
-    - target: {fileID: 9180071505763023811, guid: b22471d4ced8d41baadfe0c391d0f9ba,
-        type: 3}
-      propertyPath: m_TagString
-      value: Player1
       objectReference: {fileID: 0}
     - target: {fileID: 9180071505763023816, guid: b22471d4ced8d41baadfe0c391d0f9ba,
         type: 3}

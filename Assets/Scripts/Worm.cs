@@ -35,15 +35,15 @@ public class Worm : MonoBehaviour
   public void OnTriggerEnter (Collider collider) {
     switch (collider.tag) {
     case "Untagged":
-      return;
+      break;
 
     case "Pickup":
       pickupConsumed(collider.gameObject.GetComponent<PickupAttrs>());
       Destroy(collider.gameObject);
       break;
 
-    default:
-      if (gameObject.tag == collider.tag) return;
+    case "Worm":
+      if (collider.gameObject.GetComponent<WormIdentity>().id == _id) return;
       //Debug.Log("Got smacked by obj (" + collider.tag + ") at " +
       //    collider.gameObject.transform.position);
       die();
@@ -52,6 +52,10 @@ public class Worm : MonoBehaviour
   }
 
   public void Awake () {
+    _id = _nextWormId++; // assign ourselves an ID
+    // proceed to tag all our fucking game objects with this id
+    gameObject.AddComponent<WormIdentity>().id = _id;
+
     _initialLocation = transform.localPosition;
     _boostParticles = GetComponentInChildren<ParticleSystem>();
     _boostParticles.Stop();
@@ -190,7 +194,8 @@ public class Worm : MonoBehaviour
     var newGameObject = Instantiate(segment, lastSegment.transform.position,
         lastSegment.transform.rotation);
     newGameObject.transform.localScale = _scale;
-    newGameObject.tag = tag; // copy our tag to the segment
+    // copy our ID to the segment
+    newGameObject.AddComponent<WormIdentity>().id = _id;
     var newSeg = new SegmentRecord(newGameObject);
     newSeg.waitDistance += addDistance;
     newSeg.targetIndex = index;
@@ -242,6 +247,9 @@ public class Worm : MonoBehaviour
     }
   }
 
+  /** Our id. */
+  protected int _id;
+
   /** Our length, excluding the head. */
   protected float _length = 0;
   /** Our scale. */
@@ -259,6 +267,8 @@ public class Worm : MonoBehaviour
 
   private readonly IList<SegmentRecord> _segments = new List<SegmentRecord>();
   private readonly IList<Target> _targets = new List<Target>();
+
+  private static int _nextWormId = 0;
 }
 
 class Target {
@@ -279,4 +289,9 @@ class SegmentRecord {
   public SegmentRecord (GameObject gameObject) {
     this.gameObject = gameObject;
   }
+}
+
+class WormIdentity : MonoBehaviour {
+  /** This worm's id. */
+  public int id;
 }
