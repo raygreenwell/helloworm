@@ -32,6 +32,10 @@ public class Worm : MonoBehaviour
     _boost = boost;
   }
 
+  public void setPlayer (bool isPlayer) {
+    _isPlayer = isPlayer;
+  }
+
   public void OnTriggerEnter (Collider collider) {
     switch (collider.tag) {
     case "Untagged":
@@ -223,13 +227,18 @@ public class Worm : MonoBehaviour
     // and the head
     spawnGlowNear(gameObject, UnityEngine.Random.Range(.75f, 1.25f));
 
-    // reset the head location and rotation
-    transform.SetPositionAndRotation(_initialLocation,
-        Quaternion.Euler(0, UnityEngine.Random.Range(-180, 180), 0));
-    _length = 0;
+    if (_isPlayer) {
+      // reset the head location and rotation
+      transform.SetPositionAndRotation(_initialLocation,
+          Quaternion.Euler(0, UnityEngine.Random.Range(-180, 180), 0));
+      _length = 0;
 
-    // call Start again to reset some other stuff
-    Start();
+      // call Start again to reset some other stuff
+      Start();
+    } else {
+      // destroy our gameObject
+      Destroy(gameObject);
+    }
   }
 
   protected void spawnGlowNear (GameObject gobj, float power = PickupAttrs.DEFAULT_POWER) {
@@ -249,6 +258,8 @@ public class Worm : MonoBehaviour
 
   /** Our id. */
   protected int _id;
+
+  protected bool _isPlayer;
 
   /** Our length, excluding the head. */
   protected float _length = 0;
