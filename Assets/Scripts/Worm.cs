@@ -27,9 +27,6 @@ public class Worm : MonoBehaviour
 
   public float boostLengthLoss = 2f;
 
-  /** This worm's respawn location. */
-  public Vector3 respawn;
-
   public void steer (float turn, bool boost) {
     _turn = turn;
     _boost = boost;
@@ -55,6 +52,7 @@ public class Worm : MonoBehaviour
   }
 
   public void Awake () {
+    _initialLocation = transform.localPosition;
     _boostParticles = GetComponentInChildren<ParticleSystem>();
     _boostParticles.Stop();
   }
@@ -221,7 +219,7 @@ public class Worm : MonoBehaviour
     spawnGlowNear(gameObject, UnityEngine.Random.Range(.75f, 1.25f));
 
     // reset the head location and rotation
-    transform.SetPositionAndRotation(respawn,
+    transform.SetPositionAndRotation(_initialLocation,
         Quaternion.Euler(0, UnityEngine.Random.Range(-180, 180), 0));
     _length = 0;
 
@@ -248,6 +246,8 @@ public class Worm : MonoBehaviour
   protected float _length = 0;
   /** Our scale. */
   protected Vector3 _scale = new Vector3(1, 1, 1);
+
+  protected Vector3 _initialLocation;
 
   /** Our current controls, provided by the "steering" component. */
   // TODO: probably change

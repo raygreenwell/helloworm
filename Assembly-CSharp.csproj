@@ -55,8 +55,8 @@
   <ItemGroup>
      <Compile Include="Assets\Scripts\AiWormSteering.cs" />
      <Compile Include="Assets\Scripts\LocalPlayerWormSteering.cs" />
-     <Compile Include="Assets\Scripts\PelletSpawner.cs" />
      <Compile Include="Assets\Scripts\PickupAttrs.cs" />
+     <Compile Include="Assets\Scripts\Spawner.cs" />
      <Compile Include="Assets\Scripts\Worm.cs" />
  <Reference Include="Unity.TextMeshPro.Editor">
  <HintPath>/Users/ray/work/helloworm/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
