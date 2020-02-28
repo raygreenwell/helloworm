@@ -204,6 +204,12 @@ PrefabInstance:
       propertyPath: respawn.z
       value: 12
       objectReference: {fileID: 0}
+    - target: {fileID: 9180071505763023820, guid: b22471d4ced8d41baadfe0c391d0f9ba,
+        type: 3}
+      propertyPath: segment
+      value: 
+      objectReference: {fileID: 9184805676962145809, guid: 9f1822af36f694c4480a4af606564e85,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b22471d4ced8d41baadfe0c391d0f9ba, type: 3}
 --- !u!4 &163965260 stripped
