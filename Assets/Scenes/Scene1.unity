@@ -142,7 +142,7 @@ PrefabInstance:
     - target: {fileID: 9180071505763023816, guid: b22471d4ced8d41baadfe0c391d0f9ba,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9180071505763023816, guid: b22471d4ced8d41baadfe0c391d0f9ba,
         type: 3}
@@ -197,7 +197,7 @@ PrefabInstance:
     - target: {fileID: 9180071505763023820, guid: b22471d4ced8d41baadfe0c391d0f9ba,
         type: 3}
       propertyPath: respawn.y
-      value: 0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9180071505763023820, guid: b22471d4ced8d41baadfe0c391d0f9ba,
         type: 3}
@@ -359,7 +359,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 534669902}
   m_LocalRotation: {x: 0.20985524, y: -0, z: -0, w: 0.9777325}
-  m_LocalPosition: {x: 0, y: 5, z: -10}
+  m_LocalPosition: {x: 0, y: 4.5, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -440,8 +440,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pellet: {fileID: 3969706886210707843, guid: f48c9a7d9fa754a73bd2a0a6701fa106, type: 3}
-  minExtent: {x: -100, y: 0.5, z: -100}
-  maxExtent: {x: 100, y: 0.5, z: 100}
+  minExtent: {x: -100, y: 0, z: -100}
+  maxExtent: {x: 100, y: 0, z: 100}
   frequency: 1
 --- !u!4 &725840443
 Transform:
@@ -579,7 +579,7 @@ PrefabInstance:
     - target: {fileID: 9180071505763023816, guid: b22471d4ced8d41baadfe0c391d0f9ba,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9180071505763023816, guid: b22471d4ced8d41baadfe0c391d0f9ba,
         type: 3}
@@ -629,7 +629,7 @@ PrefabInstance:
     - target: {fileID: 9180071505763023820, guid: b22471d4ced8d41baadfe0c391d0f9ba,
         type: 3}
       propertyPath: respawn.y
-      value: 0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9180071505763023820, guid: b22471d4ced8d41baadfe0c391d0f9ba,
         type: 3}
