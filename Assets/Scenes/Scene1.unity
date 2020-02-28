@@ -350,6 +350,9 @@ MonoBehaviour:
   maxPosition: {x: 30, y: 0, z: 30}
   minRotation: {x: 0, y: -180, z: 0}
   maxRotation: {x: 0, y: 180, z: 0}
+  avoidTag: Worm
+  avoidRadius: 10
+  avoidTries: 10
   frequency: 1
 --- !u!4 &550149940
 Transform:
@@ -399,6 +402,9 @@ MonoBehaviour:
   maxPosition: {x: 100, y: 0, z: 100}
   minRotation: {x: 0, y: -180, z: 0}
   maxRotation: {x: 0, y: 180, z: 0}
+  avoidTag: 
+  avoidRadius: 0
+  avoidTries: 10
   frequency: 0.8
 --- !u!4 &725840443
 Transform:
