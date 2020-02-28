@@ -208,7 +208,8 @@ public class Worm : MonoBehaviour
     spawnGlowNear(gameObject, UnityEngine.Random.Range(.75f, 1.25f));
 
     // reset the head location and rotation
-    transform.SetPositionAndRotation(respawn, Quaternion.identity);
+    transform.SetPositionAndRotation(respawn,
+        Quaternion.Euler(0, UnityEngine.Random.Range(-180, 180), 0));
     _length = 0;
 
     // call Start again to reset some other stuff
