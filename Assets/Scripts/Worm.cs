@@ -54,6 +54,11 @@ public class Worm : MonoBehaviour
     }
   }
 
+  public void Awake () {
+    _boostParticles = GetComponentInChildren<ParticleSystem>();
+    _boostParticles.Stop();
+  }
+
   public void Start () {
     _scale.Set(1, 1, 1);
     transform.localScale = _scale;
@@ -73,6 +78,14 @@ public class Worm : MonoBehaviour
       _length = Math.Max(MIN_SEGMENTS, _length - (boostLengthLoss * Time.deltaTime));
       moveDistance *= boostSpeedFactor;
       lengthAdjusted = true;
+    }
+    if (_isBoosting != lengthAdjusted) {
+      _isBoosting = lengthAdjusted;
+      if (_isBoosting) {
+        _boostParticles.Play();
+      } else {
+        _boostParticles.Stop();
+      }
     }
 
     // now, move the head forward
@@ -236,8 +249,13 @@ public class Worm : MonoBehaviour
   /** Our scale. */
   protected Vector3 _scale = new Vector3(1, 1, 1);
 
+  /** Our current controls, provided by the "steering" component. */
+  // TODO: probably change
   protected float _turn;
   protected bool _boost;
+
+  protected ParticleSystem _boostParticles;
+  protected bool _isBoosting;
 
   private readonly IList<SegmentRecord> _segments = new List<SegmentRecord>();
   private readonly IList<Target> _targets = new List<Target>();
