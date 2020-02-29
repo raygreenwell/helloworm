@@ -480,7 +480,7 @@ Camera:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1815159033}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_ClearFlags: 1
   m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
@@ -506,7 +506,7 @@ Camera:
     m_Bits: 4294967295
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
-  m_TargetDisplay: 1
+  m_TargetDisplay: 0
   m_TargetEye: 3
   m_HDR: 1
   m_AllowMSAA: 1
@@ -628,6 +628,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 958871669949487675, guid: b22471d4ced8d41baadfe0c391d0f9ba,
+        type: 3}
+      propertyPath: mainCamera
+      value: 
+      objectReference: {fileID: 534669904}
+    - target: {fileID: 958871669949487675, guid: b22471d4ced8d41baadfe0c391d0f9ba,
+        type: 3}
+      propertyPath: overheadCamera
+      value: 
+      objectReference: {fileID: 1815159036}
     - target: {fileID: 8993163549108151187, guid: b22471d4ced8d41baadfe0c391d0f9ba,
         type: 3}
       propertyPath: m_Enabled
