@@ -28,19 +28,19 @@ public class Spawner : MonoBehaviour
     if (_accum < frequency) return;
 
     _accum -= frequency;
-    var loc = findGoodLocation();
-    if (loc == null) return;
+    var pos = findGoodPosition();
+    if (pos == null) return;
     Instantiate(toSpawn,
-        (Vector3)loc,
+        (Vector3)pos,
         Quaternion.Euler(rand(minRotation, maxRotation)));
   }
 
-  protected Vector3? findGoodLocation () {
+  protected Vector3? findGoodPosition () {
     for (int tries = 0; tries < avoidTries; tries++) {
-      var loc = rand(minPosition, maxPosition);
+      var pos = rand(minPosition, maxPosition);
       var isGood = true;
       if (avoidRadius > 0) {
-        var colliders = Physics.OverlapSphere(loc, avoidRadius);
+        var colliders = Physics.OverlapSphere(pos, avoidRadius);
         foreach (var collider in colliders) {
           if (collider.gameObject.tag == avoidTag) {
             isGood = false;
@@ -48,7 +48,7 @@ public class Spawner : MonoBehaviour
           }
         }
       }
-      if (isGood) return loc;
+      if (isGood) return pos;
     }
     return null;
   }
