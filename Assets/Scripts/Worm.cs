@@ -143,9 +143,6 @@ public class Worm : MonoBehaviour
       }
       updateScale();
     }
-
-    // auto-clear?
-    _turn = 0; _boost = false;
   }
 
   protected void updateScale () {
