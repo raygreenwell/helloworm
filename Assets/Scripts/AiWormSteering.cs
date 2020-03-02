@@ -14,14 +14,14 @@ public class AiWormSteering : MonoBehaviour
 //      List<Collider> targets = new List<Collider>();
 //      bool glow = false;
 //      foreach (var collider in Physics.OverlapSphere(transform.position, 20f)) {
-//        if (collider.gameObject.tag == "Glow") {
+//        if (collider.gameObject.CompareTag("Glow")) {
 //          if (!glow) {
 //            glow = true;
 //            targets.Clear();
 //          }
 //          targets.Add(collider);
 //
-//        } else if (!glow && collider.gameObject.tag == "Pellet") {
+//        } else if (!glow && collider.gameObject.CompareTag("Pellet")) {
 //          targets.Add(collider);
 //        }
 //      }

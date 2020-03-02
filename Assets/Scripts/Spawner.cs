@@ -42,7 +42,7 @@ public class Spawner : MonoBehaviour
       if (avoidRadius > 0) {
         var colliders = Physics.OverlapSphere(pos, avoidRadius);
         foreach (var collider in colliders) {
-          if (collider.gameObject.tag == avoidTag) {
+          if (collider.gameObject.CompareTag(avoidTag)) {
             isGood = false;
             break;
           }
